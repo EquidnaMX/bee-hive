@@ -4,6 +4,7 @@ namespace Equidna\BeeHive\Traits;
 
 use Equidna\BeeHive\Scopes\TenantScope;
 use Equidna\BeeHive\Tenancy\TenantContext;
+use Illuminate\Support\Facades\Config;
 
 trait BelongsToTenant
 {
@@ -32,6 +33,6 @@ trait BelongsToTenant
     {
         return property_exists($this, 'tenantKey')
             ? (string) $this->tenantKey
-            : (string) config('bee-hive.tenant_key', 'tenant_id');
+            : (string) Config::get('bee-hive.tenant_key', 'tenant_id');
     }
 }

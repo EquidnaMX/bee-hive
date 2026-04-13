@@ -1,25 +1,29 @@
 {
-    "name": "equidna/bee-hive",
-    "description": "Reusable multi-tenant foundation for Laravel applications.",
-    "type": "library",
-    "license": "proprietary",
-    "require": {
-        "php": "^8.2",
-        "illuminate/support": "^12.0",
-        "illuminate/database": "^12.0"
-    },
-    "autoload": {
-        "psr-4": {
-            "Equidna\\BeeHive\\": "src/"
-        }
-    },
-    "extra": {
-        "laravel": {
-            "providers": [
-                "Equidna\\BeeHive\\BeeHiveServiceProvider"
-            ]
-        }
-    },
-    "minimum-stability": "stable",
-    "prefer-stable": true
+  "name": "equidna/bee-hive",
+  "description": "Reusable multi-tenant foundation for Laravel applications.",
+  "type": "library",
+  "license": "proprietary",
+  "require": {
+    "php": "^8.2",
+    "illuminate/support": "^12.0",
+    "illuminate/database": "^12.0",
+    "illuminate/http": "^12.0"
+  },
+  "require-dev": {
+    "squizlabs/php_codesniffer": "^3.11"
+  },
+  "autoload": {
+    "psr-4": {
+      "Equidna\\BeeHive\\": "src/"
+    }
+  },
+  "extra": {
+    "laravel": {
+      "providers": [
+        "Equidna\\BeeHive\\BeeHiveServiceProvider"
+      ]
+    }
+  },
+  "minimum-stability": "stable",
+  "prefer-stable": true
 }

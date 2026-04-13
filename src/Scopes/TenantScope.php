@@ -2,11 +2,12 @@
 
 namespace Equidna\BeeHive\Scopes;
 
+use Equidna\BeeHive\Exceptions\BeeHiveException;
 use Equidna\BeeHive\Tenancy\TenantContext;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Scope;
-use RuntimeException;
+use Illuminate\Support\Facades\Config;
 
 class TenantScope implements Scope
 {
@@ -17,15 +18,15 @@ class TenantScope implements Scope
 
         $tenantKey = method_exists($tenantModel, 'getTenantKeyName')
             ? $tenantModel->getTenantKeyName()
-            : (string) config('bee-hive.tenant_key', 'tenant_id');
+            : (string) Config::get('bee-hive.tenant_key', 'tenant_id');
 
         /** @var TenantContext $context */
         $context = app(TenantContext::class);
         $tenantId = $context->get();
 
         if ($tenantId === null) {
-            if ((bool) config('bee-hive.strict', false)) {
-                throw new RuntimeException('BeeHive tenant was not resolved.');
+            if ((bool) Config::get('bee-hive.strict', false)) {
+                throw new BeeHiveException();
             }
 
             return;

@@ -3,14 +3,15 @@
 namespace Equidna\BeeHive\Tenancy\Resolvers;
 
 use Equidna\BeeHive\Contracts\TenantResolverInterface;
+use Equidna\BeeHive\Exceptions\BeeHiveException;
 use Exception;
 
 class CaronteTenantResolver implements TenantResolverInterface
 {
-    public function resolveTenantId(): string | null
+    public function resolveTenantId(): string|null
     {
         if (!class_exists(\Ometra\Caronte\Facades\Caronte::class)) {
-            throw new Exception('Caronte is not installed');
+            throw new BeeHiveException('Caronte is not installed');
         }
 
         $tenant = \Ometra\Caronte\Facades\Caronte::getTenantId();
