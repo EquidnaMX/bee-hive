@@ -1,0 +1,82 @@
+name: CI
+
+on:
+    push:
+    pull_request:
+
+jobs:
+    workflow-lint:
+        runs-on: ubuntu-latest
+        steps:
+            - name: Checkout
+              uses: actions/checkout@v4
+
+            - name: Lint GitHub workflows
+              uses: rhysd/actionlint@v1
+
+    qa-latest:
+        runs-on: ubuntu-latest
+        strategy:
+            fail-fast: false
+            matrix:
+                php-version: [ "8.2", "8.3" ]
+
+        steps:
+            - name: Checkout
+              uses: actions/checkout@v4
+
+            - name: Setup PHP
+              uses: shivammathur/setup-php@v2
+              with:
+                  php-version: ${{ matrix.php-version }}
+                  coverage: none
+
+            - name: Install dependencies
+              run: composer install --no-interaction --prefer-dist
+
+            - name: Validate composer
+              run: composer validate --no-check-publish
+
+            - name: Run dependency security audit
+              run: composer audit --no-interaction
+
+            - name: Run coding standards
+              run: ./vendor/bin/phpcs --standard=ruleset.xml src config tests
+
+            - name: Run static analysis
+              run: ./vendor/bin/phpstan analyse --memory-limit=512M
+
+            - name: Run tests
+              run: ./vendor/bin/phpunit
+
+    qa-lowest:
+        runs-on: ubuntu-latest
+        strategy:
+            fail-fast: false
+            matrix:
+                php-version: [ "8.2" ]
+
+        steps:
+            - name: Checkout
+              uses: actions/checkout@v4
+
+            - name: Setup PHP
+              uses: shivammathur/setup-php@v2
+              with:
+                  php-version: ${{ matrix.php-version }}
+                  coverage: none
+
+            - name: Update lowest dependencies
+              run: composer update --prefer-lowest --prefer-dist --no-interaction
+
+            - name: Validate composer
+              run: composer validate --no-check-publish
+
+            - name: Run coding standards
+              run: ./vendor/bin/phpcs --standard=ruleset.xml src config tests
+
+            - name: Run static analysis
+              run: ./vendor/bin/phpstan analyse --memory-limit=512M
+
+            - name: Run tests
+              run: ./vendor/bin/phpunit

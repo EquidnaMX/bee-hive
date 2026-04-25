@@ -9,6 +9,8 @@ class StaticTenantResolver implements TenantResolverInterface
 {
     public function resolveTenantId(): string|null
     {
-        return Config::get('bee-hive.static_tenant_id', null);
+        $tenantId = Config::get('bee-hive.static_tenant_id', null);
+
+        return $tenantId === null ? null : (string) $tenantId;
     }
 }

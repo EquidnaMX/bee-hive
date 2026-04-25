@@ -10,20 +10,22 @@ use RuntimeException;
 
 class BeeHiveException extends RuntimeException
 {
-    private const STATUS_CODE = 422;
+    private const DEFAULT_STATUS_CODE = 422;
     private const DEFAULT_ERROR_CODE = 'tenant_not_resolved';
 
     private const ASCII_BEE = "  \\\   /\n   )_(\n  (o o)\n /  V  \\\n/(  _  )\\\n  ^^ ^^";
 
     public function __construct(string $message = 'BeeHive tenant was not resolved.')
     {
-        parent::__construct($message, self::STATUS_CODE);
+        parent::__construct($message, self::DEFAULT_STATUS_CODE);
     }
 
     public function render(Request $request): Response|JsonResponse
     {
+        $statusCode = $this->statusCode();
+
         if ($request->expectsJson()) {
-            return new JsonResponse($this->buildJsonPayload(), self::STATUS_CODE);
+            return new JsonResponse($this->buildJsonPayload($statusCode), $statusCode);
         }
 
         $body = $this->getMessage();
@@ -34,13 +36,13 @@ class BeeHiveException extends RuntimeException
 
         return new Response(
             $body,
-            self::STATUS_CODE,
+            $statusCode,
             ['Content-Type' => 'text/plain; charset=UTF-8']
         );
     }
 
     /** @return array<string, mixed> */
-    private function buildJsonPayload(): array
+    private function buildJsonPayload(int $statusCode): array
     {
         $errorCode = (string) Config::get('bee-hive.errors.code', self::DEFAULT_ERROR_CODE);
         $contract  = (string) Config::get('bee-hive.errors.contract', 'enterprise');
@@ -53,7 +55,7 @@ class BeeHiveException extends RuntimeException
             'problem_details' => [
                 'type'   => 'urn:beehive:error:' . $errorCode,
                 'title'  => 'BeeHive Exception',
-                'status' => self::STATUS_CODE,
+                'status' => $statusCode,
                 'detail' => $this->getMessage(),
                 'code'   => $errorCode,
             ],
@@ -61,7 +63,7 @@ class BeeHiveException extends RuntimeException
                 'error' => [
                     'code'    => $errorCode,
                     'message' => $this->getMessage(),
-                    'status'  => self::STATUS_CODE,
+                    'status'  => $statusCode,
                 ],
             ],
         };
@@ -76,5 +78,12 @@ class BeeHiveException extends RuntimeException
     private function shouldIncludeDecorativePayload(): bool
     {
         return (bool) Config::get('bee-hive.errors.include_decorative_payload', false);
+    }
+
+    private function statusCode(): int
+    {
+        $status = (int) Config::get('bee-hive.errors.status', self::DEFAULT_STATUS_CODE);
+
+        return $status >= 400 && $status <= 599 ? $status : self::DEFAULT_STATUS_CODE;
     }
 }

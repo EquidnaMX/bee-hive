@@ -4,14 +4,14 @@ namespace Equidna\BeeHive\Tenancy;
 
 class TenantContext
 {
-    private int|string|null $tenantId = null;
+    private string|null $tenantId = null;
 
-    public function set(int|string|null $tenantId): void
+    public function set(string|null $tenantId): void
     {
         $this->tenantId = $tenantId;
     }
 
-    public function get(): int|string|null
+    public function get(): string|null
     {
         return $this->tenantId;
     }
