@@ -17,7 +17,7 @@ First stable release of `equidna/bee-hive`, delivering a reusable multi-tenant f
 - `BelongsToTenant` trait to automatically apply tenancy scope and tenant key population on model creation.
 - Resolver implementations:
 - `StaticTenantResolver` for fixed tenant resolution from configuration.
-- `CaronteTenantResolver` for Caronte-based tenant resolution.
+- Support for custom resolver implementations through `TenantResolverInterface`.
 - Framework integration:
 - `BeeHiveServiceProvider` with resolver binding and publishable configuration.
 - Publishable package configuration at `config/bee-hive.php`.
@@ -39,7 +39,7 @@ First stable release of `equidna/bee-hive`, delivering a reusable multi-tenant f
 
 ### Fixed
 
-- Resolver behavior now enforces explicit Caronte dependency checks and returns a package-level exception when Caronte is unavailable.
+- Resolver behavior now enforces explicit contract validation and returns a package-level exception when the configured resolver is unavailable or invalid.
 
 ### Security
 

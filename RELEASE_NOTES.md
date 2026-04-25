@@ -5,7 +5,7 @@ BeeHive reaches its first stable release with a focused, reusable multi-tenant c
 ## Highlights
 
 - First stable BeeHive package release for Laravel 12 and PHP 8.2+
-- Pluggable tenant resolver contract with static and Caronte-backed resolvers
+- Pluggable tenant resolver contract with static and custom resolver support
 - Automatic tenant query scoping and model tenant-key assignment
 - Configurable tenant resolution error contracts for consistent API responses
 
@@ -13,7 +13,7 @@ BeeHive reaches its first stable release with a focused, reusable multi-tenant c
 
 - `TenantResolverInterface`, `TenantContext`, `TenantScope`, and `BelongsToTenant`
 - `BeeHiveServiceProvider` with publishable `config/bee-hive.php`
-- `StaticTenantResolver` and `CaronteTenantResolver`
+- `StaticTenantResolver` and contract-based custom resolver implementations
 - `BeeHiveException` with multi-contract JSON payload support
 - Coding standard ruleset and package metadata baseline
 
@@ -25,7 +25,7 @@ BeeHive reaches its first stable release with a focused, reusable multi-tenant c
 
 ## Fixed
 
-- Caronte resolver now validates dependency presence and emits package-level exception when unavailable
+- Resolver binding now validates configuration and emits package-level exception when unavailable or invalid
 
 ## Security
 
