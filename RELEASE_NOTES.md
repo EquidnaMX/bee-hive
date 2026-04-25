@@ -19,7 +19,7 @@ BeeHive reaches its first stable release with a focused, reusable multi-tenant c
 
 ## Changed
 
-- Strict mode now surfaces unresolved tenant state through `BeeHiveException`
+- Unresolved tenant state now always surfaces through `BeeHiveException`
 - Error contract configurability added through `bee-hive.errors.*` settings
 - Documentation expanded with architecture and error contract details
 
@@ -29,7 +29,7 @@ BeeHive reaches its first stable release with a focused, reusable multi-tenant c
 
 ## Security
 
-- Tenant filtering and strict resolution flow help prevent accidental cross-tenant data access
+- Tenant filtering and mandatory tenant-resolution flow help prevent accidental cross-tenant data access
 
 ## Full History and Migration
 

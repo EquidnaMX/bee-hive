@@ -3,6 +3,7 @@
 namespace Equidna\BeeHive\Scopes;
 
 use Equidna\BeeHive\Exceptions\BeeHiveException;
+use Equidna\BeeHive\Support\BeeHiveLogger;
 use Equidna\BeeHive\Tenancy\TenantContext;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
@@ -18,18 +19,20 @@ class TenantScope implements Scope
 
         $tenantKey = method_exists($tenantModel, 'getTenantKeyName')
             ? $tenantModel->getTenantKeyName()
-            : (string) Config::get('bee-hive.tenant_key', 'tenant_id');
+            : (string) Config::get('bee-hive.tenant_key', 'id_tenant');
 
         /** @var TenantContext $context */
         $context = app(TenantContext::class);
         $tenantId = $context->get();
 
         if ($tenantId === null) {
-            if ((bool) Config::get('bee-hive.strict', false)) {
-                throw new BeeHiveException();
-            }
+            BeeHiveLogger::log('BeeHive tenant was not resolved for a tenant-scoped query.', [
+                'model' => get_class($tenantModel),
+                'tenant_key' => $tenantKey,
+                'resolver' => (string) Config::get('bee-hive.resolver'),
+            ], 'BEEHIVE_TENANT_UNRESOLVED_QUERY');
 
-            return;
+            throw new BeeHiveException();
         }
 
         $builder->where($tenantModel->getTable() . '.' . $tenantKey, $tenantId);

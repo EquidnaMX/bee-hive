@@ -4,6 +4,36 @@ All notable changes to this project will be documented in this file.
 
 This changelog is the canonical history for BeeHive releases and should be read before preparing future releases.
 
+## [Unreleased]
+
+### Added
+
+- Test suite with Orchestra Testbench and PHPUnit for tenant filtering, missing-tenant failures, spoofing protection, custom tenant key support, resolver validation, and scoped context refresh.
+- GitHub Actions CI workflow for composer validation, PHPCS checks, and PHPUnit execution.
+- Composer scripts: `test`, `lint`, and `qa`.
+- Exception contract tests (`enterprise`, `flat`, `problem_details`) and plain-text response coverage.
+- Package logger strategy with configurable level/enable controls, emitted through Laravel logging channels.
+- Configurable tenant error HTTP status support with validation fallback.
+- Logger event codes and sampling control for operational observability.
+
+### Changed
+
+- `TenantContext` binding changed from singleton to scoped to better isolate runtime tenant state.
+- Model creation now always enforces the resolved tenant context and neutralizes conflicting incoming tenant IDs.
+- Tenant key fallback defaults are unified to `id_tenant` across scope and trait behavior.
+- PHPCS ruleset metadata updated to project-specific values.
+- Lint scope now includes `tests` in local scripts and CI.
+- Tenant context contract is explicitly normalized to `string|null`.
+- Quality command examples now align with CI lint scope (`src`, `config`, `tests`).
+
+### Fixed
+
+- Missing tenant resolution now logs warning context before throwing `BeeHiveException` in query and model creation paths.
+
+### Security
+
+- Tenant spoofing attempts on model creation are now detected, logged, and overwritten with the resolved tenant context.
+
 ## [v1.0.0] - 2026-04-20
 
 First stable release of `equidna/bee-hive`, delivering a reusable multi-tenant foundation for Laravel applications.
@@ -30,7 +60,7 @@ First stable release of `equidna/bee-hive`, delivering a reusable multi-tenant f
 
 ### Changed
 
-- Tenant strict-mode behavior now throws `BeeHiveException` when tenant resolution is missing (instead of silently continuing when strict mode is enabled).
+- Tenant behavior now throws `BeeHiveException` whenever tenant resolution is missing.
 - Configuration expanded with `errors` contract settings:
 - `BEE_HIVE_ERROR_CONTRACT`
 - `BEE_HIVE_ERROR_CODE`
@@ -43,7 +73,7 @@ First stable release of `equidna/bee-hive`, delivering a reusable multi-tenant f
 
 ### Security
 
-- Tenant isolation enforcement is centralized via a global scope and configurable strict-mode exception handling, reducing accidental cross-tenant query exposure.
+- Tenant isolation enforcement is centralized via a global scope and mandatory tenant-resolution exception handling, reducing accidental cross-tenant query exposure.
 
 ### History Reconstruction Notes
 

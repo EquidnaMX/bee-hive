@@ -18,7 +18,8 @@ class BeeHiveServiceProvider extends ServiceProvider
 
             if (!$resolverClass) {
                 throw new InvalidArgumentException(
-                    'BeeHive resolver is not configured. Set bee-hive.resolver to a class that implements TenantResolverInterface.'
+                    'BeeHive resolver is not configured. '
+                        . 'Set bee-hive.resolver to a class that implements TenantResolverInterface.'
                 );
             }
 
@@ -33,7 +34,7 @@ class BeeHiveServiceProvider extends ServiceProvider
             return $resolver;
         });
 
-        $this->app->singleton(TenantContext::class, function ($app) {
+        $this->app->scoped(TenantContext::class, function ($app) {
             $context = new TenantContext();
             $tenantId = $app->make(TenantResolverInterface::class)->resolveTenantId();
             $context->set($tenantId);

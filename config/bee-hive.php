@@ -5,11 +5,16 @@ use Equidna\BeeHive\Tenancy\Resolvers\StaticTenantResolver;
 return [
     'tenant_key'       => env('BEE_HIVE_TENANT_KEY', 'id_tenant'),
     'static_tenant_id' => env('BEE_HIVE_STATIC_TENANT_ID', null),
-    'strict'           => env('BEE_HIVE_STRICT', false),
     'resolver'         => env('BEE_HIVE_RESOLVER', StaticTenantResolver::class),
     'errors' => [
+        'status' => env('BEE_HIVE_ERROR_STATUS', 422),
         'contract' => env('BEE_HIVE_ERROR_CONTRACT', 'enterprise'),
         'code'     => env('BEE_HIVE_ERROR_CODE', 'tenant_not_resolved'),
         'include_decorative_payload' => env('BEE_HIVE_ERROR_DECORATIVE_PAYLOAD', false),
+    ],
+    'logging' => [
+        'enabled' => env('BEE_HIVE_LOGGING_ENABLED', true),
+        'level' => env('BEE_HIVE_LOG_LEVEL', 'warning'),
+        'sample_rate' => env('BEE_HIVE_LOG_SAMPLE_RATE', 1.0),
     ],
 ];
