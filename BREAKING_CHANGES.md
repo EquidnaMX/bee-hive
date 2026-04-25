@@ -2,6 +2,10 @@
 
 ## Unreleased
 
+No unreleased breaking changes.
+
+## v2.0.0 - 2026-04-25
+
 The following changes are breaking for consumers upgrading from `v1.0.0` behavior:
 
 ### Tenant Is Always Required

@@ -1,35 +1,45 @@
-# Release v1.0.0 "Honeycomb"
+# Release v2.0.0 "Iron Hive"
 
-BeeHive reaches its first stable release with a focused, reusable multi-tenant core for Laravel. This version establishes the package baseline for tenant context resolution, query isolation, tenant assignment ergonomics, and configurable error contracts.
+BeeHive v2.0.0 hardens the tenancy runtime with fail-closed behavior, stronger anti-spoofing guarantees, and stricter quality gates. This release focuses on production resilience, observability, and safer upgrade behavior from v1.0.0.
 
 ## Highlights
 
-- First stable BeeHive package release for Laravel 12 and PHP 8.2+
-- Pluggable tenant resolver contract with static and custom resolver support
-- Automatic tenant query scoping and model tenant-key assignment
-- Configurable tenant resolution error contracts for consistent API responses
+- Mandatory tenant enforcement for reads and writes with explicit exception flow
+- Tenant spoofing neutralization on model creation with event-coded logging
+- Scoped tenant runtime context to reduce cross-runtime state leakage
+- Expanded quality gates: lint, static analysis, tests, dependency audit, and CI lanes
 
 ## Added
 
-- `TenantResolverInterface`, `TenantContext`, `TenantScope`, and `BelongsToTenant`
-- `BeeHiveServiceProvider` with publishable `config/bee-hive.php`
-- `StaticTenantResolver` and contract-based custom resolver implementations
-- `BeeHiveException` with multi-contract JSON payload support
-- Coding standard ruleset and package metadata baseline
+- Extended test suite for tenant isolation, resolver validation, exception contracts, and logger sampling behavior
+- Configurable package logger controls with event code tagging and sampling
+- Configurable tenant error HTTP status support with guarded fallback
+- CI quality execution for latest and lowest dependency lanes
 
 ## Changed
 
-- Unresolved tenant state now always surfaces through `BeeHiveException`
-- Error contract configurability added through `bee-hive.errors.*` settings
-- Documentation expanded with architecture and error contract details
+- Tenant context lifecycle moved to scoped binding for better runtime isolation
+- Tenant key fallback behavior unified to `id_tenant` across scope and trait paths
+- Lint scope expanded to include tests in local and CI workflows
+- Tenant contract normalized to `string|null` through resolver and context
 
 ## Fixed
 
-- Resolver binding now validates configuration and emits package-level exception when unavailable or invalid
+- Missing tenant operations now log contextual warning data before raising `BeeHiveException`
+- Error payload status now consistently respects configured values within safe HTTP error ranges
 
 ## Security
 
-- Tenant filtering and mandatory tenant-resolution flow help prevent accidental cross-tenant data access
+- Incoming tenant spoofing attempts are detected, logged, and overwritten with resolved context tenant
+- Mandatory tenant resolution on query and create paths reduces accidental cross-tenant data exposure
+
+## Breaking Changes
+
+- `strict` mode is removed; tenant is always required for tenant-scoped operations.
+- Client-provided tenant values on create are no longer honored when they differ from resolved context.
+- `TenantContext` now uses scoped lifecycle semantics instead of singleton behavior.
+
+Migration details are documented in [BREAKING_CHANGES.md](BREAKING_CHANGES.md).
 
 ## Full History and Migration
 

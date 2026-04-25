@@ -6,6 +6,10 @@ This changelog is the canonical history for BeeHive releases and should be read 
 
 ## [Unreleased]
 
+No unreleased changes.
+
+## [v2.0.0] - 2026-04-25
+
 ### Added
 
 - Test suite with Orchestra Testbench and PHPUnit for tenant filtering, missing-tenant failures, spoofing protection, custom tenant key support, resolver validation, and scoped context refresh.
@@ -15,6 +19,8 @@ This changelog is the canonical history for BeeHive releases and should be read 
 - Package logger strategy with configurable level/enable controls, emitted through Laravel logging channels.
 - Configurable tenant error HTTP status support with validation fallback.
 - Logger event codes and sampling control for operational observability.
+- Static analysis checks with PHPStan integrated into local quality scripts and CI.
+- CI quality lanes for both latest and lowest dependency resolution strategies.
 
 ### Changed
 
@@ -25,14 +31,17 @@ This changelog is the canonical history for BeeHive releases and should be read 
 - Lint scope now includes `tests` in local scripts and CI.
 - Tenant context contract is explicitly normalized to `string|null`.
 - Quality command examples now align with CI lint scope (`src`, `config`, `tests`).
+- Resolver and tenancy behavior now fail closed by default when tenant context is unavailable.
 
 ### Fixed
 
 - Missing tenant resolution now logs warning context before throwing `BeeHiveException` in query and model creation paths.
+- Error rendering now consistently applies configured HTTP status with a guarded fallback for invalid values.
 
 ### Security
 
 - Tenant spoofing attempts on model creation are now detected, logged, and overwritten with the resolved tenant context.
+- Mandatory tenant enforcement reduces cross-tenant leakage risk in both query and write paths.
 
 ## [v1.0.0] - 2026-04-20
 
