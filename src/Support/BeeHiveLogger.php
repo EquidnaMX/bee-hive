@@ -36,12 +36,6 @@ class BeeHiveLogger
         Log::log($level, $message, $context);
     }
 
-    /** @param (callable(): float)|null $resolver */
-    public static function setRandomFloatResolver(callable|null $resolver): void
-    {
-        self::$randomFloatResolver = $resolver;
-    }
-
     private static function shouldSample(): bool
     {
         $sampleRate = (float) Config::get('bee-hive.logging.sample_rate', 1.0);
@@ -59,5 +53,11 @@ class BeeHiveLogger
             : mt_rand() / mt_getrandmax();
 
         return $draw <= $sampleRate;
+    }
+
+    /** @param (callable(): float)|null $resolver */
+    public static function setRandomFloatResolver(callable|null $resolver): void
+    {
+        self::$randomFloatResolver = $resolver;
     }
 }

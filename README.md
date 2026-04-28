@@ -28,7 +28,7 @@ flowchart LR
 	F --> J{Tenant ID resolved?}
 	J -->|Yes| H
 	J -->|No| L[BeeHiveException]
-	L --> M[Configurable Error Contract]
+	L --> M[RFC 7807 Problem Details Response]
 ```
 
 Flow summary:
@@ -36,27 +36,31 @@ Flow summary:
 1. The service provider binds the configured tenant resolver and initializes `TenantContext`.
 2. `TenantScope` reads the tenant from context to enforce query-level isolation.
 3. `BelongsToTenant` uses the same context to auto-assign tenant key values on model creation.
-4. Missing tenant resolution always throws `BeeHiveException` with configurable response contract.
+4. Missing tenant resolution always throws `BeeHiveException` with an RFC 7807 `problem_details` JSON response.
 
-## Error Contract Options
+## Error Response
 
-BeeHive exceptions support configurable JSON contracts to keep API error formats consistent across services.
+When tenant resolution fails, `BeeHiveException` returns an RFC 7807 `problem_details` JSON response:
+
+```json
+{
+  "type": "urn:beehive:error:tenant_not_resolved",
+  "title": "BeeHive Exception",
+  "status": 422,
+  "detail": "BeeHive tenant was not resolved.",
+  "code": "tenant_not_resolved"
+}
+```
 
 Config keys (in `config/bee-hive.php`):
 
 - `errors.status`: HTTP status code for tenant resolution errors (default: `422`)
-- `errors.contract`: `enterprise` (default), `flat`, or `problem_details`
-- `errors.code`: machine-readable error code (default: `tenant_not_resolved`)
-- `errors.include_decorative_payload`: include ASCII bee payload when `true` (default: `false`)
 - `logging.enabled`: enable package log emission (default: `true`)
 - `logging.level`: package log level (`warning` by default)
 - `logging.sample_rate`: sampling ratio between `0` and `1` (default: `1.0`)
 
 Environment variables:
 
-- `BEE_HIVE_ERROR_CONTRACT`
-- `BEE_HIVE_ERROR_CODE`
-- `BEE_HIVE_ERROR_DECORATIVE_PAYLOAD`
 - `BEE_HIVE_ERROR_STATUS`
 - `BEE_HIVE_LOGGING_ENABLED`
 - `BEE_HIVE_LOG_LEVEL`

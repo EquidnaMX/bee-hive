@@ -8,9 +8,6 @@ return [
     'resolver'         => env('BEE_HIVE_RESOLVER', StaticTenantResolver::class),
     'errors' => [
         'status' => env('BEE_HIVE_ERROR_STATUS', 422),
-        'contract' => env('BEE_HIVE_ERROR_CONTRACT', 'enterprise'),
-        'code'     => env('BEE_HIVE_ERROR_CODE', 'tenant_not_resolved'),
-        'include_decorative_payload' => env('BEE_HIVE_ERROR_DECORATIVE_PAYLOAD', false),
     ],
     'logging' => [
         'enabled' => env('BEE_HIVE_LOGGING_ENABLED', true),

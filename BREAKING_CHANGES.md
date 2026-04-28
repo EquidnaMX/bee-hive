@@ -1,5 +1,25 @@
 # Breaking Changes
 
+## v3.0.0 - 2026-04-28
+
+### Error Response Format
+
+- The JSON error response is now always `problem_details` (RFC 7807). The `enterprise` and `flat` contracts are removed.
+- Consumers parsing `error.code`, `error.message`, or `error.status` from the `enterprise` format must migrate to `code`, `detail`, and `status` at the root level.
+- Consumers parsing `error` and `message` from the `flat` format must migrate to `code` and `detail` at the root level.
+
+### Removed Configuration Keys
+
+- `errors.contract` / `BEE_HIVE_ERROR_CONTRACT` — no longer exists; format is fixed.
+- `errors.code` / `BEE_HIVE_ERROR_CODE` — no longer configurable; value is always `tenant_not_resolved`.
+- `errors.include_decorative_payload` / `BEE_HIVE_ERROR_DECORATIVE_PAYLOAD` — removed entirely.
+
+### Migration Checklist
+
+- Remove `BEE_HIVE_ERROR_CONTRACT`, `BEE_HIVE_ERROR_CODE`, and `BEE_HIVE_ERROR_DECORATIVE_PAYLOAD` from all environment configurations.
+- Update API error handling to read `code`, `detail`, and `status` from the root of the JSON response.
+- Re-publish the package config: `php artisan vendor:publish --tag=bee-hive-config --force`.
+
 ## Unreleased
 
 No unreleased breaking changes.

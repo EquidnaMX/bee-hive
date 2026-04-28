@@ -1,2 +1,20 @@
-# Auto detect text files and perform LF normalization
-* text=auto
+# Enforce LF line endings for all text files
+* text=auto eol=lf
+
+# Explicitly LF for source files
+*.php text eol=lf
+*.json text eol=lf
+*.xml text eol=lf
+*.neon text eol=lf
+*.md text eol=lf
+*.yml text eol=lf
+*.yaml text eol=lf
+*.txt text eol=lf
+*.sh text eol=lf
+
+# Binary files — no line ending conversion
+*.png binary
+*.jpg binary
+*.gif binary
+*.ico binary
+*.zip binary
