@@ -8,6 +8,22 @@ This changelog is the canonical history for BeeHive releases and should be read 
 
 No unreleased changes.
 
+## [v3.0.0] - 2026-04-28
+
+### Changed
+
+- Error JSON response format standardized to RFC 7807 `problem_details` across all environments. Previous `enterprise` and `flat` contract variants are removed.
+- Error code `tenant_not_resolved` is now a fixed internal constant; it is no longer configurable via `errors.code` or `BEE_HIVE_ERROR_CODE`.
+- Repository enforces LF line endings via explicit `.gitattributes` rules.
+
+### Removed
+
+- `errors.contract` config key and `BEE_HIVE_ERROR_CONTRACT` environment variable.
+- `errors.code` config key and `BEE_HIVE_ERROR_CODE` environment variable.
+- `errors.include_decorative_payload` config key and `BEE_HIVE_ERROR_DECORATIVE_PAYLOAD` environment variable.
+- `BeeHiveException::shouldIncludeDecorativePayload()` private method.
+- ASCII bee decorative payload from all error responses.
+
 ## [v2.0.0] - 2026-04-25
 
 ### Added
